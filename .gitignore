@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# audio / video（重い素材）
+audio/*.wav
+audio/*.mp3
+video/*.mp4
+sfx/*.wav
+sfx/*.mp3

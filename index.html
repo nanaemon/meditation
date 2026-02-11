@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./img/favicon.svg?v=2">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <title>音</title>
+</head>
+<body>
+    <main>
+        <!--　====背景映像==== -->
+        <div class="video-wrap" id="videoWrap">
+            <!-- フェード用に 動画レイヤーを２層用意する（A→B）-->
+            <!-- muted（ミュート＝音を消す）主要なブラウザは「音付き動画の自動再生を制限」してるらしい -->
+            <!-- playsinline（全画面再生になるのを防止） -->
+            <video id="vidA" class="bg" muted playsinline loop></video>
+            <video id="vidB" class="bg" muted playsinline loop></video>
+        </div>
+
+        <!-- ====各映像のタイトルとキャプション==== -->
+        <!-- 初期選択は以下、JSで切り替える -->
+        <div class="overlay" aria-live="polite">
+            <h1 id="sceneTitle" class="fade">深海</h1>
+            <p id="sceneCaption" class="fade">深い海の底で</p>
+        </div>
+
+        <!-- ====シーン切り替えボタン==== -->
+        <!-- 選択＝”true” data-sceneを読み込みJSで音声と映像を切り替え-->
+        <!-- data-scene（カスタムデータ属性）JS切り替えのために必須 -->
+        <!-- role（ロール） どんな役割のUIなのか、スクリーンリーダー用　tab:タブの切り替え用-->
+        <!-- ▲aria-label（スクリーンリーダー用のラベル）  -->
+        <!-- ▲aria-current（「今どの項目がアクティブか（現在地か）」をスクリーンリーダーなどに伝える） -->
+        <div class="scenes" role="tablist" aria-label="シーン切替">
+            <button role="tab" data-scene="deepsea" aria-label="深海" aria-current="true">🪼</button>
+            <button role="tab" data-scene="firewood" aria-label="薪">🔥</button>
+            <button role="tab" data-scene="rain" aria-label="雨">☔</button>
+            <button role="tab" data-scene="thunder" aria-label="海">🌊</button>
+            <button role="tab" data-scene="forest" aria-label="森">🌲</button>
+        </div>
+
+        <!-- 音量・明るさ・タイマーなどの操作UI -->
+        <div class="controls">
+            <label for="vol">♫</label>
+            <input id="vol" type="range" min="0" max="1" step="0.01" value="0.7" aria-label="音量">
+            <label for="bright">🌙</label>
+            <input id="bright" type="range" min="0.4" max="1.1" step="0.01" value="0.85" aria-label="明るさ">
+            <select id="timer" aria-label="タイマー">
+                <option value="0">タイマーOFF</option>
+                <option value="900">15分</option>
+                <option value="1800">30分</option>
+                <option value="3600">60分</option>
+            </select>
+            <button id="pauseBtn" aria-pressed="false">⏸ 一時停止</button>
+            <button id="fullscreenBtn">⛶ 全画面</button>
+        </div>
+
+        <!-- 自動再生規制対策：初回許可 -->
+        <div class="gate" id="gate">
+            <div class="gate-inner">
+                <div>静かな世界へ、ようこそ。</div>
+                <button id="startBtn">再生をはじめる</button>
+            </div>
+        </div>
+        
+     </main>
+     <script src="./js/script.js"></script>
+</body>
+</html>

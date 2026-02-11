@@ -1,0 +1,99 @@
+/* CSSで共通で使用する変数の宣言 */
+:root{
+    --bg0:#0a0a10;    /* 背景の基本色 */
+    --fg:#e8ecf3;     /* 文字色 */ 
+    --muted:#aab3c2;  /* サブテキスト用の文字色 */
+    --accent:#92e6a7; /* アクセントカラー */
+    --fade:1.2s;        /* 動画のクロスフェード時間 */
+    --radius:14px;      /* 角丸の標準サイズ */
+}
+
+/* 全てに適用 */
+*{
+    box-sizing:border-box；/* paddingやborderを含めて幅・高さを計算→レイアウトが崩れ防止 */
+}
+
+html,body{
+    height:100%；　 /* ブラウザの高さ（画面全体）に合わせる指定 背景が途中で途切れたりするのを防止*/
+}
+
+body{
+    background:radial-gradient(1200px 600px at 80% -10%, #121520, transparent 60%), 
+    　　　　　　　linear-gradient(180deg,#0a0a10,#1e2632); 
+    color:var(--fg); 
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; 
+    overflow:hidden；/* 要素の中に入りきらない部分は表示しない→スクロールの無効 */
+}
+
+main{
+    position:relative;  /* 小要素を配置する時の原点 */
+    height:100vh;       /* ％では親用から換算、vh/vwは画面から換算した割合 */
+    width:100vw; 
+    overflow:hidden；
+}
+
+  /* 背景動画レイヤ（2枚でクロスフェード） */
+  .video-wrap{position:absolute; inset:0; filter:brightness(var(--br,1));}
+  video.bg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity var(--fade) ease; background:#000}
+  video.bg.active{opacity:1}
+
+  /* オーバーレイ（タイトル・詩） */
+  .overlay{position:absolute; inset:auto 0 18% 0; text-align:center; pointer-events:none; padding:0 16px}
+  .overlay h1{margin:.2em 0; font-weight:700; letter-spacing:.06em; font-size:clamp(22px,4.8vw,42px)}
+  .overlay p{margin:.2em 0 0; color:var(--muted); font-size:clamp(14px,3.0vw,18px)}
+  .overlay .fade{opacity:0; transform:translateY(4px); transition:opacity .8s ease, transform .8s ease}
+  .overlay .fade.show{opacity:1; transform:none}
+
+  /* シーンボタン */
+  .scenes{position:absolute; left:50%; bottom:10%; transform:translateX(-50%); display:flex; gap:12px; padding:8px 10px; border-radius:999px; background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.08); backdrop-filter: blur(6px);}
+  .scenes button{appearance:none; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06); color:var(--fg); width:42px; height:42px; border-radius:999px; font-size:18px; cursor:pointer}
+  .scenes button[aria-current="true"]{box-shadow:0 0 0 2px var(--accent) inset, 0 0 18px rgba(146,230,167,.45)}
+
+  /* 右下のコントロール */
+  .controls{position:absolute; right:12px; bottom:12px; display:flex; gap:8px; align-items:center; padding:8px 10px; border-radius:999px; background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.08); backdrop-filter: blur(6px);}
+  .controls label{font-size:12px; opacity:.9; margin-right:6px}
+  .controls input[type="range"]{width:110px}
+  .controls select, .controls button{appearance:none; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06); color:var(--fg); border-radius:999px; padding:6px 10px; cursor:pointer; font-size:12px}
+
+  /* 初回スタートオーバーレイ（自動再生規制対策） */
+  .gate{position:absolute; inset:0; display:grid; place-items:center; background:linear-gradient(180deg, rgba(10,10,16,.85), rgba(18,26,40,.85)); z-index:5}
+  .gate-inner{text-align:center; padding:24px 18px; border:1px solid rgba(255,255,255,.12); border-radius:var(--radius); background:rgba(0,0,0,.35); box-shadow:0 18px 50px rgba(0,0,0,.35)}
+  .gate button{margin-top:10px; font-size:14px; border-radius:999px; padding:10px 16px; background:linear-gradient(135deg, var(--accent), #7dd3fc); color:#0a0a10; border:none; cursor:pointer}
+
+#pauseBtn {
+    width: 7em; /* 固定幅→文字数で大きさが変わるのを防止 */
+    text-align: center;
+}
+
+#fullscreenBtn {
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color: var(--fg);
+  border-radius: 999px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* 🌙 初期状態（非表示） */
+.overlay,
+.controls,
+.scenes {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+/* 🌟 表示中クラスが付いたら表示 */
+.ui-visible .overlay,
+.ui-visible .controls,
+.ui-visible .scenes {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 低刺激モード */
+@media (prefers-reduced-motion: reduce){
+    video.bg{transition:none}
+    .overlay .fade{transition:none}
+}
