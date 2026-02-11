@@ -1,3 +1,21 @@
+<?php
+// 今日のメッセージ（毎回ランダム）
+$messages = [
+  "深呼吸をひとつ",
+  "音に身をゆだねてみる",
+  "考えなくていい時間",
+  "ただ、ここにいる",
+  "静かな世界にようこそ"
+];
+$todayMessage = $messages[array_rand($messages)];
+
+// GETで初期シーン（安全にバリデーション）
+$allowedScenes = ["deepsea","firewood","rain","thunder","forest"];
+$defaultScene = "deepsea";
+if (isset($_GET["scene"]) && in_array($_GET["scene"], $allowedScenes, true)) {
+  $defaultScene = $_GET["scene"];
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -60,12 +78,15 @@
         <!-- 自動再生規制対策：初回許可 -->
         <div class="gate" id="gate">
             <div class="gate-inner">
-                <div>静かな世界へ、ようこそ。</div>
+                <p class="daily-message"><?php echo htmlspecialchars($todayMessage, ENT_QUOTES, "UTF-8"); ?></p>
                 <button id="startBtn">再生をはじめる</button>
             </div>
         </div>
         
      </main>
+     <script>
+        window.DEFAULT_SCENE = "<?php echo htmlspecialchars($defaultScene, ENT_QUOTES, "UTF-8"); ?>";
+     </script>
      <script src="./js/script.js"></script>
 </body>
 </html>

@@ -54,7 +54,7 @@ let aFront = audioA, aBack = audioB;
   a.volume = 0;
 });
 
-let currentScene = 'deepsea';
+let currentScene = window.DEFAULT_SCENE || 'deepsea';
 let timerId = 0, fadeOutInt = 0;
 let fadeTimer = null, pauseFadeTimer = null;
 let isPaused = false;
